@@ -40,9 +40,9 @@ module.exports = [
         });
 
         if (session.dialogData.ActualMonthlyRepayment <= session.dialogData.AcceptableMonthlyRepayment)
-            session.send("Congratulations "+session.dialogData.FirstName+"!  The actual monthly repayment would be: $"+session.dialogData.ActualMonthlyRepayment);
+            session.send("Congratulations!  The actual monthly repayment would be: $"+session.dialogData.ActualMonthlyRepayment);
         else
-            session.send("Unfortunately "+session.dialogData.FirstName+", the actual monthly repayment would be: $"+session.dialogData.ActualMonthlyRepayment);
+            session.send("Unfortunately, the actual monthly repayment would be: $"+session.dialogData.ActualMonthlyRepayment);
         session.endDialog();        
     }
 
