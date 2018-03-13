@@ -65,6 +65,8 @@ var bot = new builder.UniversalBot(connector, [
             case DialogLabels.Repay:
                 return session.beginDialog('How Much Can I Repay?');
         }
+
+        session.endDialog();
     }
 ]);
 

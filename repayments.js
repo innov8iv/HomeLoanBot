@@ -6,28 +6,55 @@ module.exports = [
 
     // Value 
     function (session) {
-        builder.Prompts.number(session, "How much do you want to borrow?");
+        builder.Prompts.number(session, "How much do you want to borrow?", {
+            maxRetries: 3,
+            retryPrompt: 'Please enter the loan amount.'
+        });
     },
     function (session, results, next) {
-        session.dialogData.BorrowingAmount = results.response;
+        if (!results.response) {
+            // exhausted attemps and no selection, start over
+            session.send('Oops! Too many attempts!  I\'ll set the loan amount to $250,000 for you.');
+            session.dialogData.BorrowingAmount = 250000;
+        }
+        else
+            session.dialogData.BorrowingAmount = results.response;
         next();
     },
 
     // Check-in
     function (session) {
-        builder.Prompts.number(session, "How many years do you want to pay it back over?");
+        builder.Prompts.number(session, "How many years do you want to pay it back over?", {
+            maxRetries: 3,
+            retryPrompt: 'Please enter the number of years you want to repay over (typically 30 years)'
+        });
     },
     function (session, results, next) {
-        session.dialogData.LoanYears = results.response;
+        if (!results.response) {
+            // exhausted attemps and no selection, start over
+            session.send('Oops! Too many attempts!  I\'ll set the number of years to 30 for you.');
+            session.dialogData.LoanYears = 30;
+        }
+        else
+            session.dialogData.LoanYears = results.response;
         next();
     },
 
     // Nights
     function (session) {
-        builder.Prompts.number(session, "What is the maximum monthly repayment you can afford?");
+        builder.Prompts.number(session, "What is the maximum monthly repayment you can afford?", {
+            maxRetries: 3,
+            retryPrompt: 'Please enter the monthly repayment amount you can afford.'
+        });
     },
     function (session, results, next) {
-        session.dialogData.AcceptableMonthlyRepayment = results.response;
+        if (!results.response) {
+            // exhausted attemps and no selection, start over
+            session.send('Oops! Too many attempts!  I\'ll set the monthly repayment amount to $1,500.');
+            session.dialogData.AcceptableMonthlyRepayment = 1500;
+        }
+        else
+            session.dialogData.AcceptableMonthlyRepayment = results.response;
         next();
     },
 
@@ -40,10 +67,9 @@ module.exports = [
         });
 
         if (session.dialogData.ActualMonthlyRepayment <= session.dialogData.AcceptableMonthlyRepayment)
-            session.send("Congratulations!  The actual monthly repayment would be: $"+session.dialogData.ActualMonthlyRepayment);
+            session.send("Congratulations!  The actual monthly repayment would be approximately: $%i",session.dialogData.ActualMonthlyRepayment);
         else
-            session.send("Unfortunately, the actual monthly repayment would be: $"+session.dialogData.ActualMonthlyRepayment);
-        session.endDialog();        
+            session.send("Unfortunately, the actual monthly repayment would be approximately: $%i which is $%i over the amount you believe you can afford.", session.dialogData.ActualMonthlyRepayment, session.dialogData.ActualMonthlyRepayment - session.dialogData.AcceptableMonthlyRepayment);        
     }
 
     // Search...
