@@ -71,10 +71,26 @@ module.exports = [
         else
             session.send("Unfortunately, the actual monthly repayment would be approximately: $%i which is $%i over the amount you believe you can afford.", session.dialogData.ActualMonthlyRepayment, session.dialogData.ActualMonthlyRepayment - session.dialogData.AcceptableMonthlyRepayment);   
 
-        var card = createHeroCard(session);
-
+        var card = createHeroCard(session,session.dialogData.BorrowingAmount,5.93,session.dialogData.LoanYears
+            ,'NAB Variable Rate Loan 5.93'
+            ,'earn 350,000 NAB Rewards Points'
+            ,'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg'
+            ,'https://www.nab.com.au/personal/interest-rates-fees-and-charges/interest-rates-for-home-lending#'
+            ,'Talk to NAB'
+        );
         // attach the card to the reply message
         var msg = new builder.Message(session).addAttachment(card);
+        session.send(msg);
+
+        card = createHeroCard(session,session.dialogData.BorrowingAmount,5.38,session.dialogData.LoanYears
+            ,'Westpac Variable Rate Loan 5.38'
+            ,'Offset your Rocket Repay Home Loan with your Westpac Choice account to reduce interest paid.'
+            ,'https://www.westpac.com.au/content/dam/public/wbc/images/personal/home-loans/wbc-pp_p_home-loans_variable_flexi-first-option-home-loan_440x156.jp'
+            ,'https://www.westpac.com.au/personal-banking/home-loans/variable/'
+            ,'Talk to Westpac'
+        );
+        // attach the card to the reply message
+        msg = new builder.Message(session).addAttachment(card);
         session.send(msg);
 
     }
@@ -110,20 +126,20 @@ module.exports = [
     // }
 ];
 
-function createHeroCard(session,loan_amount,interest_rate) {
+function createHeroCard(session,loan_amount,interest_rate,term_years,loan_title,loan_subtitle,loan_image,loan_action,loan_call_to_action) {
     return new builder.HeroCard(session)
-        .title('NAB Variable Rate Loan 5.93')
-        .subtitle('earn 350,000 NAB Rewards Points')
+        .title(loan_title)
+        .subtitle(loan_subtitle)
         .text('Monthly Repayment on $%i over %i years would be approx $%i per Month - Principal and Interest based on the advertised comparison rate of 5.93', session.dialogData.BorrowingAmount, session.dialogData.LoanYears, LoanCalc.paymentCalc({
-            amount: session.dialogData.BorrowingAmount,
-            rate: 5.93,
-            termMonths: session.dialogData.LoanYears * 12
+            amount: loan_amount,
+            rate: interest_rate,
+            termMonths: term_years * 12
         }))
         .images([
-            builder.CardImage.create(session, 'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg')
+            builder.CardImage.create(session, loan_image)
         ])
         .buttons([
-            builder.CardAction.openUrl(session, 'https://www.nab.com.au/personal/interest-rates-fees-and-charges/interest-rates-for-home-lending#', 'Talk to NAB')
+            builder.CardAction.openUrl(session, loan_action, loan_call_to_action)
         ]);
 };
 
