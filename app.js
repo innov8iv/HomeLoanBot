@@ -26,7 +26,7 @@ var DialogLabels = {
 var bot = new builder.UniversalBot(connector, [
     // What is your name
     function (session) {
-        builder.Prompts.text(session, "Welcome to the BrokerChat\n\rWhat's your Name?");
+        builder.Prompts.text(session, "What's your Name?");
     },
     function (session, results, next) {
         session.dialogData.FirstName = results.response;
@@ -80,4 +80,18 @@ bot.dialog('support', require('./support'))
 // log any bot errors into the console
 bot.on('error', function (e) {
     console.log('And error ocurred', e);
+});
+
+bot.on('conversationUpdate', function(message) {
+    // Send a hello message when bot is added
+    if (message.membersAdded) {
+        message.membersAdded.forEach(function(identity) {
+            if (identity.id === message.address.bot.id) {
+                
+                var reply = new builder.Message().address(message.address).text("Hi! Welcome to the BrokerChat.");                
+              
+                bot.send(reply);
+            }
+        });
+    }
 });
