@@ -71,26 +71,24 @@ module.exports = [
         else
             session.send("Unfortunately, the actual monthly repayment would be approximately: $%i which is $%i over the amount you believe you can afford.", session.dialogData.ActualMonthlyRepayment, session.dialogData.ActualMonthlyRepayment - session.dialogData.AcceptableMonthlyRepayment);   
 
-        var card = createHeroCard(session,session.dialogData.BorrowingAmount,5.93,session.dialogData.LoanYears
+        var msg = new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel);
+        msg.addAttachment(createHeroCard(session,session.dialogData.BorrowingAmount,5.93,session.dialogData.LoanYears
             ,'NAB Variable Rate Loan 5.93'
             ,'earn 350,000 NAB Rewards Points'
             ,'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg'
             ,'https://www.nab.com.au/personal/interest-rates-fees-and-charges/interest-rates-for-home-lending#'
             ,'Talk to NAB'
-        );
-        // attach the card to the reply message
-        var msg = new builder.Message(session).addAttachment(card);
+        ));
 
-        card = createHeroCard(session,session.dialogData.BorrowingAmount,5.38,session.dialogData.LoanYears
+        msg.addAttachment(createHeroCard(session,session.dialogData.BorrowingAmount,5.38,session.dialogData.LoanYears
             ,'Westpac Variable Rate Loan 5.38'
             ,'Offset your Rocket Repay Home Loan with your Westpac Choice account to reduce interest paid.'
-            ,'https://www.westpac.com.au/content/dam/public/wbc/images/personal/home-loans/wbc-pp_p_home-loans_variable_flexi-first-option-home-loan_440x156.jp'
+            ,'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg'
             ,'https://www.westpac.com.au/personal-banking/home-loans/variable/'
             ,'Talk to Westpac'
-        );
+        ));
         // attach the card to the reply message
-        msg.addAttachment(card);
-        session.send(msg);
+        session.send(msg).endDialog();
 
     }
 
