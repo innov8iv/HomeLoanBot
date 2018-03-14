@@ -87,6 +87,14 @@ module.exports = [
             ,'https://www.westpac.com.au/personal-banking/home-loans/variable/'
             ,'Talk to Westpac'
         ));
+
+        msg.addAttachment(createHeroCard(session,session.dialogData.BorrowingAmount,5.38,session.dialogData.LoanYears
+            ,'St George Variable Rate Loan 5.38'
+            ,'Offset your Rocket Repay Home Loan with your Westpac Choice account to reduce interest paid.'
+            ,'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg'
+            ,'https://www.westpac.com.au/personal-banking/home-loans/variable/'
+            ,'Talk to St George'
+        ));
         // attach the card to the reply message
         session.send(msg).endDialog();
 
