@@ -112,13 +112,13 @@ module.exports = [
 
 function createHeroCard(session,loan_amount,interest_rate) {
     return new builder.HeroCard(session)
-        .title('NAB Variable Rate Home Loan 5.93% comparison rate')
-        .text('If you were to take this loan the Monthly Repayment on $%i over %i years would be approximately $%i per Month - Principal and Interest based on the advertised comparison rate of 5.93%', session.dialogData.BorrowingAmount, session.dialogData.LoanYears, LoanCalc.paymentCalc({
+        .title('NAB Variable Rate Home Loan 5.93 comparison rate')
+        .subtitle('earn 350,000 NAB Rewards Points with an eligible NAB Home Loan')
+        .text('If you were to take this loan the Monthly Repayment on $%i over %i years would be approximately $%i per Month - Principal and Interest based on the advertised comparison rate of 5.93', session.dialogData.BorrowingAmount, session.dialogData.LoanYears, LoanCalc.paymentCalc({
             amount: session.dialogData.BorrowingAmount,
             rate: 5.93,
             termMonths: session.dialogData.LoanYears * 12
         }))
-        .subtitle('earn 350,000 NAB Rewards Points with an eligible NAB Home Loan and Banking Bundle*.')
         .images([
             builder.CardImage.create(session, 'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg')
         ])
