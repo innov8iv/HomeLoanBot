@@ -69,7 +69,14 @@ module.exports = [
         if (session.dialogData.ActualMonthlyRepayment <= session.dialogData.AcceptableMonthlyRepayment)
             session.send("Congratulations!  The actual monthly repayment would be approximately: $%i",session.dialogData.ActualMonthlyRepayment);
         else
-            session.send("Unfortunately, the actual monthly repayment would be approximately: $%i which is $%i over the amount you believe you can afford.", session.dialogData.ActualMonthlyRepayment, session.dialogData.ActualMonthlyRepayment - session.dialogData.AcceptableMonthlyRepayment);        
+            session.send("Unfortunately, the actual monthly repayment would be approximately: $%i which is $%i over the amount you believe you can afford.", session.dialogData.ActualMonthlyRepayment, session.dialogData.ActualMonthlyRepayment - session.dialogData.AcceptableMonthlyRepayment);   
+
+        var card = createHeroCard(session);
+
+        // attach the card to the reply message
+        var msg = new builder.Message(session).addAttachment(card);
+        session.send(msg);
+
     }
 
     // Search...
@@ -102,6 +109,23 @@ module.exports = [
     //         });
     // }
 ];
+
+function createHeroCard(session,loan_amount,interest_rate) {
+    return new builder.HeroCard(session)
+        .title('NAB Variable Rate Home Loan 5.93% comparison rate')
+        .subtitle('Monthly Repayment on $%i over %i years is $%i - Principal and Interest - Residential Investment', session.dialogData.BorrowingAmount, session.dialogData.LoanYears, LoanCalc.paymentCalc({
+            amount: session.dialogData.BorrowingAmount,
+            rate: 5.93,
+            termMonths: session.dialogData.LoanYears * 12
+        }))
+        .text('Buying, investing in or renovating a property is rewarding enough. Having the opportunity to earn 350,000 NAB Rewards Points with an eligible NAB Home Loan and Banking Bundle* just makes life even better.')
+        .images([
+            builder.CardImage.create(session, 'https://www.nab.com.au/content/dam/nabrwd/common/target/NAB_Woman_In_Doorway_With_Dog.jpg')
+        ])
+        .buttons([
+            builder.CardAction.openUrl(session, 'https://www.nab.com.au/personal/interest-rates-fees-and-charges/interest-rates-for-home-lending#', 'Talk to NAB')
+        ]);
+};
 
 // // Helpers
 // function hotelAsAttachment(hotel) {
