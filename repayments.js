@@ -80,7 +80,6 @@ module.exports = [
         );
         // attach the card to the reply message
         var msg = new builder.Message(session).addAttachment(card);
-        session.send(msg);
 
         card = createHeroCard(session,session.dialogData.BorrowingAmount,5.38,session.dialogData.LoanYears
             ,'Westpac Variable Rate Loan 5.38'
@@ -90,7 +89,7 @@ module.exports = [
             ,'Talk to Westpac'
         );
         // attach the card to the reply message
-        msg = new builder.Message(session).addAttachment(card);
+        msg.addAttachment(card);
         session.send(msg);
 
     }
