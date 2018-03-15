@@ -28,7 +28,7 @@ var DialogLabels = {
 var bot = new builder.UniversalBot(connector, [
     // What is your name
     function (session) {
-        builder.Prompts.text(session, "What's your Name %s?",session.userData.first_name);
+        builder.Prompts.text(session, "What's your Name, " + session.userData.FirstName);
     },
     function (session, results, next) {
         session.dialogData.FirstName = results.response;
@@ -74,7 +74,7 @@ var bot = new builder.UniversalBot(connector, [
 
 bot.use(  
     RetrieveUserProfile({
-        accessToken: process.env.FacebookAccessToken,
+        accessToken: process.env.FacebookAccessToken
     })
 );
 
