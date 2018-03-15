@@ -27,7 +27,7 @@ var DialogLabels = {
 var bot = new builder.UniversalBot(connector, [
     // What is your name
     function (session) {
-        builder.Prompts.text(session, "What's your Name, " + session.userData.FirstName);
+        builder.Prompts.text(session, "What's your Name, " + session.userData.first_name);
     },
     function (session, results, next) {
         session.dialogData.FirstName = results.response;
