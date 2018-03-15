@@ -27,19 +27,6 @@ var DialogLabels = {
 
 var bot = new builder.UniversalBot(connector, [
     function (session) {        
-
-        var email = new sendgrid.Email({
-            to: 'gerard.dillon@innov8iv.com',
-            from: 'botmail@innov8iv.com',
-            subject: 'Conversation: '+session.userData.first_name+' '+session.userData.last_name,
-            html: 'Gender: '+session.userData.gender+', Locale:'+session.userData.locale+', Timezone: '+timezone+', Pic: '+profile_pic
-        });
-
-        sendgrid.send(email, function(err, json){
-            if(err) { return console.error(err); }
-            console.log(json);
-        });
-
         // prompt for search option        
         builder.Prompts.choice(
             session,
@@ -110,3 +97,15 @@ bot.on('conversationUpdate', function(message) {
         });
     }
 });
+
+// var email = new sendgrid.Email({
+//     to: 'gerard.dillon@innov8iv.com',
+//     from: 'botmail@innov8iv.com',
+//     subject: 'Conversation: '+session.userData.first_name+' '+session.userData.last_name,
+//     html: 'Gender: '+session.userData.gender+', Locale:'+session.userData.locale+', Timezone: '+timezone+', Pic: '+profile_pic
+// });
+
+// sendgrid.send(email, function(err, json){
+//     if(err) { return console.error(err); }
+//     console.log(json);
+// });
