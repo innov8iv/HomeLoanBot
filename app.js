@@ -1,6 +1,8 @@
 // This loads the environment variables from the .env file
 require('dotenv-extended').load();
 
+import { RetrieveUserProfile } from 'botbuilder-facebookextension';
+
 var builder = require('botbuilder');
 var restify = require('restify');
 
@@ -26,7 +28,7 @@ var DialogLabels = {
 var bot = new builder.UniversalBot(connector, [
     // What is your name
     function (session) {
-        builder.Prompts.text(session, "What's your Name?");
+        builder.Prompts.text(session, "What's your Name %s?",session.userData.first_name);
     },
     function (session, results, next) {
         session.dialogData.FirstName = results.response;
@@ -69,6 +71,12 @@ var bot = new builder.UniversalBot(connector, [
         session.endDialog();
     }
 ]);
+
+bot.use(  
+    RetrieveUserProfile({
+        accessToken: process.env.FacebookAccessToken,
+    })
+);
 
 bot.dialog('How Much Can I Loan?', require('./loan'));
 bot.dialog('How Much Can I Repay?', require('./repayments'));
