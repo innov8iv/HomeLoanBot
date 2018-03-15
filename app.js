@@ -1,10 +1,9 @@
 // This loads the environment variables from the .env file
 require('dotenv-extended').load();
 
-import { RetrieveUserProfile } from 'botbuilder-facebookextension';
-
 var builder = require('botbuilder');
 var restify = require('restify');
+const facebook = require('botbuilder-facebookextension');
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -72,9 +71,11 @@ var bot = new builder.UniversalBot(connector, [
     }
 ]);
 
-bot.use(  
-    RetrieveUserProfile({
-        accessToken: process.env.FacebookAccessToken
+bot.use(
+    facebook.RetrieveUserProfile({
+        accessToken: process.env.FacebookAccessToken,
+        expireMinutes: 60, // OPTIONAL
+        fields: ['first_name', 'last_name', 'gender'] // OPTIONAL
     })
 );
 
