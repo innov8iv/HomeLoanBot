@@ -25,19 +25,11 @@ var DialogLabels = {
 };
 
 var bot = new builder.UniversalBot(connector, [
-    // What is your name
-    function (session) {
-        builder.Prompts.text(session, "What's your Name, " + session.userData.first_name);
-    },
-    function (session, results, next) {
-        session.dialogData.FirstName = results.response;
-        next();
-    },        
     function (session) {        
         // prompt for search option
         builder.Prompts.choice(
             session,
-            'Hi ' + session.dialogData.FirstName + ', let me help you work out what you can afford?',
+            'Hi ' + session.userData.first_name + ', let me help you work out what you can afford?',
             [DialogLabels.Loan, DialogLabels.Repay],
             {
                 maxRetries: 3,
@@ -75,7 +67,7 @@ bot.use(
     facebook.RetrieveUserProfile({
         accessToken: process.env.FacebookAccessToken,
         expireMinutes: 60, // OPTIONAL
-        fields: ['first_name', 'last_name', 'gender'] // OPTIONAL
+        fields: ['first_name', 'last_name', 'gender', 'locale', 'timezone','profile_pic'] // OPTIONAL
     })
 );
 
@@ -97,7 +89,7 @@ bot.on('conversationUpdate', function(message) {
         message.membersAdded.forEach(function(identity) {
             if (identity.id === message.address.bot.id) {
                 
-                var reply = new builder.Message().address(message.address).text("Hi! Welcome to the BrokerChat.");                
+                var reply = new builder.Message().address(message.address).text("Hi "+session.userData.first_name+"! Welcome to the BrokerChat.");
               
                 bot.send(reply);
             }
