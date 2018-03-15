@@ -4,6 +4,7 @@ require('dotenv-extended').load();
 var builder = require('botbuilder');
 var restify = require('restify');
 const facebook = require('botbuilder-facebookextension');
+var sendgrid = require('sendgrid')(process.env.sendgrid_username, process.env.sendgrid_password);
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -26,7 +27,20 @@ var DialogLabels = {
 
 var bot = new builder.UniversalBot(connector, [
     function (session) {        
-        // prompt for search option
+
+        var email = new sendgrid.Email({
+            to: 'gerard.dillon@innov8iv.com',
+            from: 'botmail@innov8iv.com',
+            subject: 'Conversation: '+session.userData.first_name+' '+session.userData.last_name,
+            html: 'Gender: '+session.userData.gender+', Locale:'+session.userData.locale+', Timezone: '+timezone+', Pic: '+profile_pic
+        });
+
+        sendgrid.send(email, function(err, json){
+            if(err) { return console.error(err); }
+            console.log(json);
+        });
+
+        // prompt for search option        
         builder.Prompts.choice(
             session,
             'Hi ' + session.userData.first_name + ', let me help you work out what you can afford?',
