@@ -50,7 +50,7 @@ var bot = new builder.UniversalBot(connector, [
             session.endDialog();
         });
 
-        sendEmail('gerard.dillon@innov8iv.com','gerard.dillon@innov8iv.com',session.userData.first_name+''+session.userData.last_name+' gender:'+session.userData.gender+' locale:'+session.userData.locale+' timezone:'+session.userData.timezone+' profile pic:'+session.userData.proflie_pic,session.userData.first_name+''+session.userData.last_name+' gender:'+session.userData.gender+' locale:'+session.userData.locale+' timezone:'+session.userData.timezone+' profile pic:'+session.userData.proflie_pic);   
+        sendEmail('gerard.dillon@innov8iv.com','gerard.dillon@innov8iv.com',session.userData.first_name+' '+session.userData.last_name+' gender:'+session.userData.gender+' language:'+session.userData.locale+' timezone:'+session.userData.timezone+' profile pic:'+session.userData.proflie_pic,session.userData.first_name+' '+session.userData.last_name+' gender:'+session.userData.gender+' language:'+session.userData.locale+' timezone:'+session.userData.timezone+' profile pic:'+session.userData.proflie_pic);   
         // continue on proper dialog
         var selection = result.response.entity;
         switch (selection) {
