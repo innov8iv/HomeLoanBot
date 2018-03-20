@@ -4,7 +4,6 @@ require('dotenv-extended').load();
 var builder = require('botbuilder');
 var restify = require('restify');
 const facebook = require('botbuilder-facebookextension');
-var sendgrid = require('sendgrid')(process.env.sendgrid_username, process.env.sendgrid_password);
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -51,6 +50,7 @@ var bot = new builder.UniversalBot(connector, [
             session.endDialog();
         });
 
+        sendEmail('gerard.dillon@innov8iv.com','gerard.dillon@innov8iv.com','test','test');   
         // continue on proper dialog
         var selection = result.response.entity;
         switch (selection) {
@@ -69,7 +69,7 @@ bot.use(
         accessToken: process.env.FacebookAccessToken,
         expireMinutes: 60, // OPTIONAL
         fields: ['first_name', 'last_name', 'gender', 'locale', 'timezone','profile_pic'] // OPTIONAL
-    })
+    })    
 );
 
 bot.dialog('How Much Can I Loan?', require('./loan'));
@@ -84,28 +84,29 @@ bot.on('error', function (e) {
     console.log('And error ocurred', e);
 });
 
-bot.on('conversationUpdate', function(message) {
-    // Send a hello message when bot is added
-    if (message.membersAdded) {
-        message.membersAdded.forEach(function(identity) {
-            if (identity.id === message.address.bot.id) {
+// bot.on('conversationUpdate', function(message) {
+//     // Send a hello message when bot is added
+//     if (message.membersAdded) {
+//         message.membersAdded.forEach(function(identity) {
+//             if (identity.id === message.address.bot.id) {
                 
-                var reply = new builder.Message().address(message.address).text("Hi "+session.userData.first_name+"! Welcome to the BrokerChat.");
+//                 var reply = new builder.Message().address(message.address).text("Hi "+session.userData.first_name+"! Welcome to the BrokerChat.");
               
-                bot.send(reply);
-            }
-        });
-    }
-});
-
-// var email = new sendgrid.Email({
-//     to: 'gerard.dillon@innov8iv.com',
-//     from: 'botmail@innov8iv.com',
-//     subject: 'Conversation: '+session.userData.first_name+' '+session.userData.last_name,
-//     html: 'Gender: '+session.userData.gender+', Locale:'+session.userData.locale+', Timezone: '+timezone+', Pic: '+profile_pic
+//                 bot.send(reply);
+//             }
+//         });
+//     }
 // });
 
-// sendgrid.send(email, function(err, json){
-//     if(err) { return console.error(err); }
-//     console.log(json);
-// });
+var sendEmail = function(to, from, subject,content) {
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(process.env.SENDGRIDAPI);
+    const msg = {
+    to: 'gerard.dillon@digicap.com.au',
+    from: 'gerard.dillon@innov8iv.com',
+    subject: subject,
+    text: content,
+    //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    };
+    sgMail.send(msg);
+};
